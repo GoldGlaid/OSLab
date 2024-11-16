@@ -129,54 +129,6 @@ OSLab/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/build
 .PHONY : OSLab/fast
 
-lab1/child1.o: lab1/child1.c.o
-.PHONY : lab1/child1.o
-
-# target to build an object file
-lab1/child1.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child1.c.o
-.PHONY : lab1/child1.c.o
-
-lab1/child1.i: lab1/child1.c.i
-.PHONY : lab1/child1.i
-
-# target to preprocess a source file
-lab1/child1.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child1.c.i
-.PHONY : lab1/child1.c.i
-
-lab1/child1.s: lab1/child1.c.s
-.PHONY : lab1/child1.s
-
-# target to generate assembly for a file
-lab1/child1.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child1.c.s
-.PHONY : lab1/child1.c.s
-
-lab1/child2.o: lab1/child2.c.o
-.PHONY : lab1/child2.o
-
-# target to build an object file
-lab1/child2.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child2.c.o
-.PHONY : lab1/child2.c.o
-
-lab1/child2.i: lab1/child2.c.i
-.PHONY : lab1/child2.i
-
-# target to preprocess a source file
-lab1/child2.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child2.c.i
-.PHONY : lab1/child2.c.i
-
-lab1/child2.s: lab1/child2.c.s
-.PHONY : lab1/child2.s
-
-# target to generate assembly for a file
-lab1/child2.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/child2.c.s
-.PHONY : lab1/child2.c.s
-
 lab1/parent.o: lab1/parent.c.o
 .PHONY : lab1/parent.o
 
@@ -210,12 +162,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... OSLab"
-	@echo "... lab1/child1.o"
-	@echo "... lab1/child1.i"
-	@echo "... lab1/child1.s"
-	@echo "... lab1/child2.o"
-	@echo "... lab1/child2.i"
-	@echo "... lab1/child2.s"
 	@echo "... lab1/parent.o"
 	@echo "... lab1/parent.i"
 	@echo "... lab1/parent.s"
