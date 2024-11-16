@@ -17,21 +17,33 @@ void reverse_string(char *str) {
     }
 }
 
-int main(int argc, char *argv[]) {
-    //файл только на запись был создан в parent, но как его сюда передать?
 
+int main(int argc, char *argv[]) {
     char *end;
     int fd = strtol(argv[1], &end, 10);
+    int recieved_number, len_row;
+    char status;
 
-    char buffer[1024];
-    ssize_t bytes_read;
+    fread(&status, sizeof(char), 1, stdin);
+    while (status != EOF) {
 
-    while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0) {
-        buffer[bytes_read] = '\0';
-        reverse_string(buffer);
+        fread(&recieved_number, sizeof(recieved_number), 1, stdin);
 
-        write(STDIN_FILENO, buffer, strlen(buffer));
-        write(fd, buffer, strlen(buffer));
+        char *row = (char *) malloc(sizeof(char) * recieved_number);
+        if (row == NULL) {
+            return 1;
+        }
+
+        fread(row, sizeof(char), recieved_number, stdin);
+        len_row = strlen(row);
+
+        reverse_string(row);
+        write(STDIN_FILENO, row, len_row);
+        write(fd, row, len_row);
+
+        fread(&status, sizeof(char), 1, stdin);
+
+        free(row);
     }
 
     close(fd);

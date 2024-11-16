@@ -125,6 +125,7 @@ int main(int argc, char *argv[]) {
         char *const args[] = {"child2", fd, NULL};
         int32_t status = execv(path2, args); // Запускаем child2.c
 
+
         if (status == -1) {
             const char *msg_error = "ERROR: ERROR_EXECV2\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
@@ -143,15 +144,16 @@ int main(int argc, char *argv[]) {
     //Пишем сообщение
     char msg[512];
     uint32_t len = snprintf(msg, sizeof(msg) - 1,
-                            "Please enter the lines you want to invert. Write 'STOP' to exit.\n");
+                            "Please enter the lines you want to invert. Press 'CTRL + D' to exit.\n");
     write(STDIN_FILENO, msg, len);
 
 
     srand(time(NULL));
 
-    char s = '0';
-    while (s != EOF) {
-        char *buf = get_row(&s);
+    char symbol = '0';
+
+    while (symbol != EOF) {
+        char *buf = get_row(&symbol);
         if (buf == NULL) {
             const char *msg_error = "ERROR: MEMORY_ERROR\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
@@ -159,29 +161,29 @@ int main(int argc, char *argv[]) {
             exit(MEMORY_ERROR);
         }
 
-        if (s == EOF) {
-            free(buf);
-            break;
-        }
-
         int random_number = rand() % 100;
 
         char msg_pipe[512];
+        long int len = strlen(buf);
         if (random_number < 80) {
-            write(pipe1[1], buf, sizeof(buf) + 1);
+            write(pipe1[1], &symbol, sizeof(char));
+            write(pipe1[1], &len, sizeof(len));
+            write(pipe1[1], buf, len);
+
 
             uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
                                         "[PARENT] Sent to pipe1: %s\n", buf);
             write(STDIN_FILENO, msg_pipe, len_msg);
 
         } else {
-            write(pipe2[1], buf, sizeof(buf) + 1);
+            write(pipe2[1], &symbol, sizeof(char));
+            write(pipe2[1], &len, sizeof(len));
+            write(pipe2[1], buf, len);
 
             uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
                                         "[PARENT] Sent to pipe2: %s\n", buf);
             write(STDIN_FILENO, msg_pipe, len_msg);
         }
-
         free(buf);
     }
 
@@ -191,7 +193,7 @@ int main(int argc, char *argv[]) {
     close(pipe2[1]);
     close(file1);
     close(file2);
-    // Надо ли ждать дочерние?
+
     return 0;
 }
 

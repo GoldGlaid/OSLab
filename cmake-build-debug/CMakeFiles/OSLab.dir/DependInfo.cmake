@@ -8,6 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/lab1/child1.c" "CMakeFiles/OSLab.dir/lab1/child1.c.o" "gcc" "CMakeFiles/OSLab.dir/lab1/child1.c.o.d"
+  "/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/lab1/child2.c" "CMakeFiles/OSLab.dir/lab1/child2.c.o" "gcc" "CMakeFiles/OSLab.dir/lab1/child2.c.o.d"
   "/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/lab1/parent.c" "CMakeFiles/OSLab.dir/lab1/parent.c.o" "gcc" "CMakeFiles/OSLab.dir/lab1/parent.c.o.d"
   )
 

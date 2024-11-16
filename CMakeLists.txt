@@ -5,4 +5,6 @@ set(CMAKE_C_STANDARD 23)
 
 add_executable(OSLab
         lab1/parent.c
+        lab1/child1.c
+        lab1/child2.c
 )

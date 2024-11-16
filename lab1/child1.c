@@ -18,21 +18,36 @@ void reverse_string(char *str) {
 }
 
 int main(int argc, char *argv[]) {
-    //файл только на запись был создан в parent, но как его сюда передать?
-
     char *end;
-    int fd = strtol(argv[1], &end, 10);
+    int fd, recieved_number, len_row;
+    char status;
+    fd = strtol(argv[1], &end, 10);;
+    fread(&status, sizeof(char), 1, stdin);
+    printf("status is %d\n", status);
+    while (status != EOF) {
 
-    char buffer[1024];
-    ssize_t bytes_read;
+        fread(&recieved_number, sizeof(recieved_number), 1, stdin);
+        printf("recieved_number is %d\n", recieved_number);
 
-    while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0) {
-        buffer[bytes_read] = '\0';
-        reverse_string(buffer);
+        char *row = (char *) malloc(sizeof(char) * recieved_number);
+        if (row == NULL) {
+            return 1;
+        }
 
-        // file?
-        write(STDIN_FILENO, buffer, strlen(buffer));
-        write(fd, buffer, strlen(buffer));
+        if (fread(row, sizeof(char), recieved_number, stdin) == -1) {
+            printf("GOOOOOOOOOOOOOOOOOOOOOOOOOL\n");
+        }
+
+        len_row = strlen(row);
+        printf("row first %c\n", row[0]);
+
+
+        reverse_string(row);
+        write(STDIN_FILENO, row, len_row);
+        write(fd, row, len_row);
+
+        fread(&status, sizeof(char), 1, stdin);
+        free(row);
     }
 
     close(fd);
