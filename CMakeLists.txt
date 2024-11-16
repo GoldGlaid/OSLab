@@ -4,4 +4,5 @@ project(OSLab C)
 set(CMAKE_C_STANDARD 23)
 
 add_executable(OSLab
-        lab1/lab1.c)
+        lab1/parent.c
+)

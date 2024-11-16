@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/OSLab.dir/lab1/lab1.c.o"
-  "CMakeFiles/OSLab.dir/lab1/lab1.c.o.d"
+  "CMakeFiles/OSLab.dir/lab1/parent.c.o"
+  "CMakeFiles/OSLab.dir/lab1/parent.c.o.d"
   "OSLab"
   "OSLab.pdb"
 )

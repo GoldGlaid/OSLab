@@ -23,15 +23,18 @@ int main(int argc, char *argv[]) {
     //Заносим в массив рандомные числа
     srand(time(NULL));
     for (int i = 0; i < sizeArr; ++i) {
-        arr[i] = rand() % 100;
+        arr[i] = rand() % 1000;
     }
 
     //Открываем файловый дескриптор только на запись
-    int fd_write = open("sum", 00);
+    int fd_write = open(NAME_FIFO, O_WRONLY);
     if (fd_write == -1) {
-        printf("Fail with opening fd :(\n");
-        return FD_ERROR;
+        if (mkfifo(NAME_FIFO, S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH) == -1) {
+            printf("MKFIFO_ERROR\n");
+            return MKFIFO_ERROR;
+        }
     }
+
 
     //Записываем в файловый дескриптор наш массив чисел
     //arr - указывает на 1 элемент массива в памяти, следовательно,
