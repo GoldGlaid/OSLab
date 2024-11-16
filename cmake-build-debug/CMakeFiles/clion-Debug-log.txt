@@ -1,16 +1,10 @@
-/home/goldglaid/Clion/clion-2024.2.3/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug child1.txt child2.txt -G "Unix Makefiles" -S /home/goldglaid/CLionProjects/OSLab -B /home/goldglaid/CLionProjects/OSLab/cmake-build-debug
-CMake Warning:
-  Ignoring extra path from command line:
-
-   "/home/goldglaid/CLionProjects/OSLab/cmake-build-debug/child1.txt"
-
-
-CMake Warning:
-  Ignoring extra path from command line:
-
-   "child2.txt"
-
-
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /home/goldglaid/CLionProjects/OSLab/cmake-build-debug
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /mnt/c/Users/GoldGlaid/CLionProjects/OSLab -B /mnt/c/Users/GoldGlaid/CLionProjects/OSLab/cmake-build-debug
+-- The C compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/c/Users/GoldGlaid/CLionProjects/OSLab/cmake-build-debug

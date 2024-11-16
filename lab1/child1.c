@@ -20,13 +20,8 @@ void reverse_string(char *str) {
 int main(int argc, char *argv[]) {
     //файл только на запись был создан в parent, но как его сюда передать?
 
-    // char *path_file = argv[1];
-    // int32_t file = open(path_file, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0600);
-    // if (file == -1) {
-    //     const char msg[] = "error: failed to open requested file\n";
-    //     write(STDERR_FILENO, msg, sizeof(msg));
-    //     exit(EXIT_FAILURE);
-    // }
+    char *end;
+    int fd = strtol(argv[1], &end, 10);
 
     char buffer[1024];
     ssize_t bytes_read;
@@ -34,10 +29,16 @@ int main(int argc, char *argv[]) {
     while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0) {
         buffer[bytes_read] = '\0';
         reverse_string(buffer);
+
         // file?
         write(STDIN_FILENO, buffer, strlen(buffer));
+        write(fd, buffer, strlen(buffer));
     }
 
+    close(fd);
     close(STDIN_FILENO);
     return 0;
 }
+
+
+

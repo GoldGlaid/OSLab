@@ -21,6 +21,8 @@ typedef enum {
     ERROR_EXECV,
 } state;
 
+char *get_row(char *symbol);
+
 int main(int argc, char *argv[]) {
 
     //Валидация на кол-во аргументов
@@ -48,76 +50,12 @@ int main(int argc, char *argv[]) {
         exit(INVALID_FILES);
     }
 
-    //Пишем сообщение
-    char msg[512];
-    uint32_t len = snprintf(msg, sizeof(msg) - 1,
-                            "Please enter the lines you want to invert. Write 'STOP' to exit.\n");
-    write(STDIN_FILENO, msg, len);
-
     //Создаем каналы для передачи строк в дочерние процессы
     int pipe1[2], pipe2[2];
     if (pipe(pipe1) == -1 || pipe(pipe2) == -1) {
         const char *msg_error = "[PARENT] ERROR: INVALID_PIPE.\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
         exit(INVALID_PIPE);
-    }
-
-    srand(time(NULL));
-
-    // Считываем из буфера ввода, пока не встретим STOP
-    ssize_t bytes;
-    while (true) {
-        char *buf = (char *) malloc(sizeof(char) * 1024);
-        if (!buf) {
-            const char *msg_error = "[PARENT] ERROR: MEMORY_ERROR.\n";
-            write(STDERR_FILENO, msg_error, strlen(msg_error));
-            exit(MEMORY_ERROR);
-        }
-
-        bytes = read(STDIN_FILENO, buf, 1024);
-
-        if (bytes < 0) {
-            const char *msg_error = "[PARENT] ERROR: INVALID_READ.\n";
-            write(STDERR_FILENO, msg_error, strlen(msg_error));
-            free(buf);
-            exit(INVALID_FILES);
-        }
-
-        // Обрезаем строку на символе новой строки
-        buf[bytes] = '\0';
-        for (size_t i = 0; i < bytes; i++) {
-            if (buf[i] == '\n') {
-                buf[i] = '\0';
-                break;
-            }
-        }
-
-
-        if (strcmp(buf, "STOP") == 0 || bytes == 0) {
-            free(buf);
-            break;
-        }
-
-        // Определяем в какой pipe запишем строку
-        int random_number = rand() % 100;
-        if (random_number < 80) {
-            //типо так ?
-            dup2(STDIN_FILENO, pipe1[STDIN_FILENO]);
-
-            char msg_pipe[512];
-            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
-                                        "[PARENT] Sent to pipe1: %s\n", buf);
-            write(STDIN_FILENO, msg_pipe, len_msg);
-
-        } else {
-            //типо так ?
-            dup2(STDIN_FILENO, pipe2[STDIN_FILENO]);
-
-            char msg_pipe[512];
-            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
-                                        "[PARENT] Sent to pipe2: %s\n", buf);
-            write(STDIN_FILENO, msg_pipe, len_msg);
-        }
     }
 
     // Создаем дочерний процесс 1
@@ -134,27 +72,30 @@ int main(int argc, char *argv[]) {
         //ПРОВЕРКА
         printf("child 1\n");
 
-        // Закрываем pipe1 на запись
-        close(pipe1[STDOUT_FILENO]);
-
         // Закрываем другой pipe для ДЧ2
         close(pipe2[1]);
         close(pipe2[0]);
 
-        //Полный путь до child1 (пока хз как по другому сделать)
-        const char *path1 = "/home/goldglaid/CLionProjects/OSLab/lab1/child1";
+        dup2(pipe1[0], STDIN_FILENO);
 
-        char *const args[] = {"child1", input_path1, NULL};
+
+        //Полный путь до child1 (пока хз как по другому сделать)
+        const char *path1 = "./child1";
+
+        char fd[32];
+        snprintf(fd, sizeof(fd) - 1, "%d", file1);
+        char *const args[] = {"child1", fd, NULL};
+
         int32_t status = execv(path1, args); // Запускаем child1.c
 
         if (status == -1) {
-            const char *msg_error = "error: failed to exec into new executable image\n";
+            const char *msg_error = "ERROR: ERROR_EXECV1\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
-            exit(EXIT_FAILURE);
+            exit(ERROR_EXECV);
         }
     }
 
-    // Создаем дочерний процесс 1
+    // Создаем дочерний процесс 2
     pid_t child2 = fork();
     if (child2 == -1) {
         perror("Fork failed");
@@ -167,56 +108,131 @@ int main(int argc, char *argv[]) {
         //ПРОВЕРКА
         printf("child 2\n");
 
-        // Закрываем pipe2 на запись
-        close(pipe2[STDOUT_FILENO]);
-
         // Закрываем другой pipe для ДЧ2
         close(pipe1[1]);
         close(pipe1[0]);
 
-        //Полный путь до child2 (пока хз как по другому сделать)
-        const char *path2 = "/home/goldglaid/CLionProjects/OSLab/lab1/child2";
+        dup2(pipe2[0], STDIN_FILENO);
 
 
-        char *const args[] = {"child2", input_path2, NULL};
+        //Полный путь до child2
+        const char *path2 = "./child2";
+
+        // Создаем файловый дескриптор для ДЧ2
+        char fd[10];
+        snprintf(fd, sizeof(fd) - 1, "%d", file2);
+
+        char *const args[] = {"child2", fd, NULL};
         int32_t status = execv(path2, args); // Запускаем child2.c
 
         if (status == -1) {
-            const char *msg_error = "ERROR: ERROR_EXECV\n";
+            const char *msg_error = "ERROR: ERROR_EXECV2\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
             exit(ERROR_EXECV);
         }
     }
 
-    // Закрываем pipe-ы в родительском процессе после полной передачи строк
-    close(pipe1[1]);
-    close(pipe2[1]);
     close(pipe1[0]);
     close(pipe2[0]);
 
+
+    // Считываем из буфера ввода, пока не встретим EOF
+    // In Windows, Control+Z is the typical keyboard shortcut to mean
+    // "end of file", in Linux and Unix it's typically Control+D.
+
+    //Пишем сообщение
+    char msg[512];
+    uint32_t len = snprintf(msg, sizeof(msg) - 1,
+                            "Please enter the lines you want to invert. Write 'STOP' to exit.\n");
+    write(STDIN_FILENO, msg, len);
+
+
+    srand(time(NULL));
+
+    char s = '0';
+    while (s != EOF) {
+        char *buf = get_row(&s);
+        if (buf == NULL) {
+            const char *msg_error = "ERROR: MEMORY_ERROR\n";
+            write(STDERR_FILENO, msg_error, strlen(msg_error));
+            free(buf);
+            exit(MEMORY_ERROR);
+        }
+
+        if (s == EOF) {
+            free(buf);
+            break;
+        }
+
+        int random_number = rand() % 100;
+
+        char msg_pipe[512];
+        if (random_number < 80) {
+            write(pipe1[1], buf, sizeof(buf) + 1);
+
+            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
+                                        "[PARENT] Sent to pipe1: %s\n", buf);
+            write(STDIN_FILENO, msg_pipe, len_msg);
+
+        } else {
+            write(pipe2[1], buf, sizeof(buf) + 1);
+
+            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
+                                        "[PARENT] Sent to pipe2: %s\n", buf);
+            write(STDIN_FILENO, msg_pipe, len_msg);
+        }
+
+        free(buf);
+    }
+
+
+    // Закрываем pipe-ы в родительском процессе после полной передачи строк
+    close(pipe1[1]);
+    close(pipe2[1]);
+    close(file1);
+    close(file2);
     // Надо ли ждать дочерние?
     return 0;
 }
 
 
-// const pid_t id_child1 = fork();
-// switch (id_child1) {
-//     case -1: {
-//         const char *msg_error = "[PARENT] ERROR: INVALID_FORK.\n";
-//         write(STDOUT_FILENO, msg_error, strlen(msg_error));
-//         for (size_t i = 0; i < sizeArray; ++i) {
-//             // Очистка всех строк и массива
-//             free(array_rows[i]);
-//         }
-//         free(array_rows);
-//         exit(INVALID_FORK);
-//     }
-//
-//     case 0: {
-//         pid_t pid_child = getpid();
-//         for (int i )
-//         write(fd[0], array_rows)
-//     }
-//
-//     default: ;
-// }
+char *get_row(char *symbol) {
+    int size = 0;
+    int capacity = 2;
+    char *buf = (char *) malloc(sizeof(char) * (capacity + 1));
+
+    if (buf == NULL) {
+        return NULL;  // Если не удалось выделить память, сразу возвращаем NULL
+    }
+
+    *symbol = (char) getchar();  // Считываем первый символ
+
+    while (*symbol != '\n' && *symbol != EOF) {
+        // Проверка на переполнение
+        if (size == capacity) {
+            capacity *= 2;
+            char *buffer_realloc = (char *) realloc(buf, sizeof(char) * (capacity + 1));
+            if (buffer_realloc == NULL) {
+                free(buf);
+                return NULL;
+            }
+            buf = buffer_realloc;
+        }
+
+        buf[size] = *symbol;
+        size++;
+
+        *symbol = (char) getchar();
+    }
+
+    // Увеличиваем размер на 1 для символа '\0'
+    char *buffer_realloc = (char *) realloc(buf, sizeof(char) * (capacity + 2));
+    if (buffer_realloc == NULL) {
+        free(buf);
+        return NULL;
+    }
+    buf = buffer_realloc;
+
+    buf[size] = '\0';
+    return buf;
+}
