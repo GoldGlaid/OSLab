@@ -21,13 +21,11 @@ int main(int argc, char *argv[]) {
 
     fread(&status, sizeof(char), 1, stdin);
     while (status != EOF) {
-        fread(&recieved_number, sizeof(recieved_number),  1, stdin);
-
+        fread(&recieved_number, sizeof(recieved_number), 1, stdin);
         char *row = (char *) malloc(sizeof(char) * recieved_number);
         row[0] = '\0';
 
         fread(row, sizeof(char), recieved_number, stdin);
-        printf("ROW = %s\n", row);
 
         row[recieved_number] = '\0';
         reverse_string(row);
@@ -36,8 +34,6 @@ int main(int argc, char *argv[]) {
         write(STDOUT_FILENO, row, recieved_number);
         write(STDOUT_FILENO, &space, 1);
 
-
-
         fread(&status, sizeof(char), 1, stdin);
         free(row);
     }
@@ -45,6 +41,3 @@ int main(int argc, char *argv[]) {
     close(STDIN_FILENO);
     return 0;
 }
-
-
-

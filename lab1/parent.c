@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-
+#include <sys/wait.h>
 #include <stdbool.h>
 
 typedef enum {
@@ -60,15 +60,13 @@ int main(int argc, char *argv[]) {
     if (child1 == -1) {
         const char *msg_error = "[PARENT] ERROR: INVALID_FORK.\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
+        close(file1);
+        close(file2);
         exit(ERROR_FORK);
     }
 
     // Дочерний процесс 1
     if (child1 == 0) {
-
-        //ПРОВЕРКА
-        printf("child 1\n");
-
         // Закрываем другой pipe для ДЧ2
         close(pipe2[1]);
         close(pipe2[0]);
@@ -76,7 +74,7 @@ int main(int argc, char *argv[]) {
         dup2(pipe1[0], STDIN_FILENO);
 
 
-        //Полный путь до child1
+        //путь до child1
         const char *path1 = "./child1";
 
         char fd[10];
@@ -90,6 +88,8 @@ int main(int argc, char *argv[]) {
         if (status == -1) {
             const char *msg_error = "[PARENT] ERROR: ERROR_EXECV1\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
+            close(file1);
+            close(file2);
             exit(ERROR_EXECV);
         }
     }
@@ -99,14 +99,13 @@ int main(int argc, char *argv[]) {
     if (child2 == -1) {
         const char *msg_error = "[PARENT] ERROR: INVALID_FORK.\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
+        close(file1);
+        close(file2);
         exit(ERROR_FORK);
     }
 
     // Дочерний процесс 2
     if (child2 == 0) {
-
-        //ПРОВЕРКА
-        printf("child 2\n");
 
         // Закрываем другой pipe для ДЧ2
         close(pipe1[1]);
@@ -128,8 +127,10 @@ int main(int argc, char *argv[]) {
         int32_t status = execv(path2, args); // Запускаем child2.c
 
         if (status == -1) {
-            const char *msg_error = "ERROR: ERROR_EXECV2\n";
+            const char *msg_error = "[PARENT] ERROR: ERROR_EXECV2\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
+            close(file1);
+            close(file2);
             exit(ERROR_EXECV);
         }
     }
@@ -144,28 +145,34 @@ int main(int argc, char *argv[]) {
 
     //Пишем сообщение
     char *msg = "Please enter the lines you want to invert. Press 'CTRL + D' to exit.\n";
-    write(STDIN_FILENO, msg, strlen(msg));
+    write(STDOUT_FILENO, msg, strlen(msg));
 
 
     srand(time(NULL));
 
     char symbol = '0';
     while (symbol != EOF) {
+        int random_number = rand() % 100;
+        char msg_pipe[512];
+        int len;
 
         char *buf = get_row(&symbol);
         if (buf == NULL) {
             const char *msg_error = "ERROR: MEMORY_ERROR\n";
             write(STDERR_FILENO, msg_error, strlen(msg_error));
             free(buf);
+
+            close(file1);
+            close(file2);
             exit(MEMORY_ERROR);
+
+        }
+        if (symbol == EOF) {
+            break;
         }
 
-        int random_number = rand() % 100;
-        char msg_pipe[512];
-        int len = strlen(buf);
+        len = strlen(buf);
         if (random_number < 80) {
-            printf("[PARENT] recieved_number is %d\n", len);
-
             write(pipe1[1], &symbol, sizeof(char));
             write(pipe1[1], &len, sizeof(len));
             write(pipe1[1], buf, len);
@@ -185,6 +192,10 @@ int main(int argc, char *argv[]) {
         }
         free(buf);
     }
+    symbol = EOF;
+    write(pipe1[1], &symbol, sizeof(char));
+    write(pipe2[1], &symbol, sizeof(char));
+
 
 
     // Закрываем pipe-ы в родительском процессе после полной передачи строк
@@ -192,6 +203,9 @@ int main(int argc, char *argv[]) {
     close(pipe2[1]);
     close(file1);
     close(file2);
+
+    wait(NULL);
+    wait(NULL);
 
     return OK;
 }
