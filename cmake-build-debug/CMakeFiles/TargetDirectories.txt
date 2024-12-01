@@ -1,3 +1,0 @@
-/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/cmake-build-debug/CMakeFiles/OSLab.dir
-/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/Users/GoldGlaid/CLionProjects/OSLab/cmake-build-debug/CMakeFiles/rebuild_cache.dir
