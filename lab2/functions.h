@@ -31,6 +31,17 @@ typedef struct {
     Point **array;
 } PointMassive;
 
+// === Потоки ====
+typedef struct {
+    // Массив точек
+    PointMassive *massive;
+    int num_threads; // Общее количество потоков
+    int thread_id; // Уникальный ID потока
+    double max_area; // Максимальная площадь, найденная этим потоком
+    Point *max_points[3]; // Точки, образующие треугольник с максимальной площадью
+} ThreadData;
+
+// === Потоки ====
 
 state is_digital(const char *str, double *x);
 
@@ -44,8 +55,6 @@ state insert(PointMassive **massive, double x, double y, double z);
 
 void freePointMassive(PointMassive *massive);
 
-int is_threeAngle(double x, double y, double z);
-
 PointMassive *create_PointMassive(int capacity);
 
 double get_area(double x, double y, double z);
@@ -53,6 +62,8 @@ double get_area(double x, double y, double z);
 double vector_length(double x, double y, double z);
 
 double triangle_area(Point *a, Point *b, Point *c);
+
+void *find_max_area_thread(void *arg);
 
 
 state is_digital(const char *str, double *x) {
@@ -159,7 +170,7 @@ state insert(PointMassive **massive, double x, double y, double z) {
 
     if (masive_p->size == masive_p->capacity) {
         masive_p->capacity *= 2;
-        Point **temp_buffer = (Point **) realloc(masive_p->array, masive_p->capacity);
+        Point **temp_buffer = (Point **) realloc(masive_p->array, masive_p->capacity * sizeof(Point *));
         if (temp_buffer == NULL) {
             free(element);
             return MEMORY_ERROR;
@@ -237,5 +248,38 @@ double triangle_area(Point *a, Point *b, Point *c) {
     return 0.5 * cross_length;
 }
 
+
+// === Потоки ====
+void *find_max_area_thread(void *arg) {
+    ThreadData *data = (ThreadData *) arg;
+    PointMassive *massive = data->massive;
+    int num_points = massive->size;
+
+    double max_area = 0.0;
+    Point *max_points[3] = {NULL, NULL, NULL};
+
+    // Циклическое распределение работы
+    for (int i = 0; i < num_points - 2; i++) {
+        for (int j = i + 1; j < num_points - 1; j++) {
+            for (int k = j + 1; k < num_points; k++) {
+                if ((i + j + k) % data->num_threads != data->thread_id) {
+                    continue; // Эта комбинация не для данного потока
+                }
+                double area = triangle_area(massive->array[i], massive->array[j], massive->array[k]);
+                if (area > max_area) {
+                    max_area = area;
+                    max_points[0] = massive->array[i];
+                    max_points[1] = massive->array[j];
+                    max_points[2] = massive->array[k];
+                }
+            }
+        }
+    }
+
+    data->max_area = max_area;
+    memcpy(data->max_points, max_points, sizeof(max_points));
+    pthread_exit(NULL);
+}
+// === Потоки ====
 
 #endif //FUNCTIONS_H

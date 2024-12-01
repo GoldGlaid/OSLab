@@ -1,0 +1,9 @@
+<toolSet name="External Tools">
+  <tool name="Test" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="false" showConsoleOnStdErr="false" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="\\wsl$\Ubuntu\home\goldglaid\OSLabs\lab2\parent.c" />
+      <option name="PARAMETERS" value="-o parent -lm" />
+      <option name="WORKING_DIRECTORY" value="//wsl$/Ubuntu/home/goldglaid/OSLabs/lab2" />
+    </exec>
+  </tool>
+</toolSet>

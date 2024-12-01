@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define POINTS_COUNT 30 // Количество точек в массиве
+#define POINTS_COUNT 1000// Количество точек в массиве
 #define RANGE 100       // Диапазон значений координат
 
 typedef struct {
@@ -18,17 +18,18 @@ void generate_points(Point points[], int count, int range) {
     }
 }
 
-void print_points(Point points[], int count) {
+void print_points(FILE *file, Point points[], int count) {
     for (int i = 0; i < count; i++) {
-        printf("%d, %d, %d\n", points[i].x, points[i].y, points[i].z);
+        fprintf(file, "%d %d %d\n", points[i].x, points[i].y, points[i].z);
     }
 }
 
 int main() {
     Point points[POINTS_COUNT];
 
+    FILE *file = fopen("file.txt", "w");
     generate_points(points, POINTS_COUNT, RANGE);
-    print_points(points, POINTS_COUNT);
-
+    print_points(file, points, POINTS_COUNT);
+    fclose(file);
     return 0;
 }
