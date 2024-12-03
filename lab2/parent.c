@@ -64,7 +64,6 @@ int main(const int argc, char *argv[]) {
     Point *max_points[3] = {NULL, NULL, NULL};
     for (int t = 0; t < num_threads; t++) {
         pthread_join(threads[t], NULL);
-        // printf("Thread %d finished\n", t + 1);
         if (thread_data[t].max_area > max_area) {
             max_area = thread_data[t].max_area;
             memcpy(max_points, thread_data[t].max_points, sizeof(max_points));
@@ -88,7 +87,7 @@ int main(const int argc, char *argv[]) {
     freePointMassive(massive);
 
 
-    printf("Time take: %0.6f\n seconds", delta);
+    printf("Time take: %0.6f seconds\n", delta);
 
     return 0;
 }
