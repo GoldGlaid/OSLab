@@ -77,8 +77,9 @@ int main(int argc, char *argv[]) {
 
     // Дочерний процесс 1
     if (child1 == 0) {
+        dup2(file1, STDOUT_FILENO);
         // Дочерний процесс 1
-        char *const args[] = {"child1", input_path1, NULL};
+        char *const args[] = {"child1", "1", NULL};
         sem_wait(sem1); // Ждем семафор
         execv("./child1", args);
         const char *msg_error = "[PARENT] ERROR: ERROR_EXECV1\n";
@@ -98,8 +99,10 @@ int main(int argc, char *argv[]) {
 
     // Дочерний процесс 2
     if (child2 == 0) {
+        dup2(file2, STDOUT_FILENO);
+
         // Дочерний процесс 2
-        char *const args[] = {"child2", input_path2, NULL};
+        char *const args[] = {"child2", "2", NULL};
         sem_wait(sem2); // Ждем семафор
         execv("./child2", args);
         const char *msg_error = "[PARENT] ERROR: ERROR_EXECV2\n";
@@ -127,23 +130,25 @@ int main(int argc, char *argv[]) {
         if (symbol == EOF) {
             break;
         }
-        char msg_pipe[512];
+        char msg_sem[512];
         if (random_number < 80) {
             strcpy(shm, buf);
             sem_post(sem1); // Отправляем сигнал дочернему процессу 1
-            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
+            uint32_t len_msg = snprintf(msg_sem, sizeof(msg_sem) - 1,
                                         "[PARENT] Sent to child1: %s\n", buf);
-            write(STDOUT_FILENO, msg_pipe, len_msg);
+            write(STDOUT_FILENO, msg_sem, len_msg);
         } else {
             strcpy(shm, buf);
             sem_post(sem2); // Отправляем сигнал дочернему процессу 2
-            uint32_t len_msg = snprintf(msg_pipe, sizeof(msg_pipe) - 1,
+            uint32_t len_msg = snprintf(msg_sem, sizeof(msg_sem) - 1,
                                         "[PARENT] Sent to child2: %s\n", buf);
-            write(STDOUT_FILENO, msg_pipe, len_msg);
+            write(STDOUT_FILENO, msg_sem, len_msg);
         }
         free(buf);
     }
+
     symbol = EOF;
+    printf("proizoshol POST\n");
     strcpy(shm, &symbol);
     sem_post(sem1);
     sem_post(sem2);
@@ -159,8 +164,6 @@ int main(int argc, char *argv[]) {
 
     close(file1);
     close(file2);
-    wait(NULL);
-    wait(NULL);
 
     return OK;
 }

@@ -16,16 +16,24 @@ void reverse_string(char *str) {
 }
 
 int main(int argc, char *argv[]) {
-    // Открываем семафоры
-    sem_t *sem1 = sem_open("/sem1", 0);
-    sem_t *sem2 = sem_open("/sem2", 0);
-    if (sem1 == SEM_FAILED || sem2 == SEM_FAILED) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <child_number>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    int child_number = atoi(argv[1]);
+    sem_t *sem;
+    if (child_number == 1)
+        sem = sem_open("/sem1", 0);
+    else
+        sem = sem_open("/sem2", 0);
+
+    if (sem == SEM_FAILED) {
         const char *msg_error = "[CHILD] ERROR: SEMAPHORE_ERROR.\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
         exit(EXIT_FAILURE);
     }
 
-    // Создаем область общей памяти
     const size_t SHM_SIZE = 4096;
     char *shm = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (shm == MAP_FAILED) {
@@ -36,35 +44,32 @@ int main(int argc, char *argv[]) {
 
     char status;
     while (1) {
-        // Ожидаем сигнал от родителя
-        sem_wait(sem1); // Для дочернего процесса 1
-        sem_wait(sem2); // Для дочернего процесса 2
+        fprintf(stderr,"%s is waiting row\n", argv[0]);
+        sem_wait(sem);
+        fprintf(stderr,"%s proshol\n", argv[0]);
 
-        // Читаем статус
+
         status = shm[0];
         if (status == EOF) {
-            break; // Выход из цикла, если получен EOF
+            break;
         }
 
-        // Получаем строку
-        char *row = &shm[1]; // Строка начинается с индекса 1
-        int received_number = strlen(row); // Длина строки
+        char *row = &shm[1];
+        int received_number = strlen(row);
 
-        // Инвертируем строку
         reverse_string(row);
 
-        // Записываем результат обратно в stdout
         char newline = '\n';
         write(STDOUT_FILENO, row, received_number);
         write(STDOUT_FILENO, &newline, 1);
+        fprintf(stderr,"%s write into file\n", argv[0]);
     }
 
-    // Освобождаем ресурсы
+
     munmap(shm, SHM_SIZE);
-    sem_close(sem1);
-    sem_close(sem2);
-    sem_unlink("/sem1");
-    sem_unlink("/sem2");
+    sem_close(sem);
+    sem_unlink(child_number == 1 ? "/sem1" : "/sem2");
+    fprintf(stderr,"%s exit\n", argv[0]);
 
     return 0;
 }
