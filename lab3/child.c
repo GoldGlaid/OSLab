@@ -20,10 +20,11 @@ int main(int argc, char *argv[]) {
 
     int child_number = atoi(argv[1]);
     sem_t *sem;
-    if (child_number == 1)
+    if (child_number == 1) {
         sem = sem_open(SEM_NAME1, 1);
-    else
+    } else {
         sem = sem_open(SEM_NAME2, 1);
+    }
 
     if (sem == SEM_FAILED) {
         const char *msg_error = "[CHILD] ERROR: SEMAPHORE_ERROR.\n";
@@ -42,7 +43,6 @@ int main(int argc, char *argv[]) {
     }
 
     while (1) {
-
         sem_wait(sem);
 
         status = shm[0];

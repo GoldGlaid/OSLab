@@ -117,41 +117,139 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named OSLab
+# Target rules for targets named parent_lab2
 
 # Build rule for target.
-OSLab: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 OSLab
-.PHONY : OSLab
+parent_lab2: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 parent_lab2
+.PHONY : parent_lab2
 
 # fast build rule for target.
-OSLab/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/build
-.PHONY : OSLab/fast
+parent_lab2/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab2.dir/build.make CMakeFiles/parent_lab2.dir/build
+.PHONY : parent_lab2/fast
 
-lab1/parent.o: lab1/parent.c.o
-.PHONY : lab1/parent.o
+#=============================================================================
+# Target rules for targets named GenCords
+
+# Build rule for target.
+GenCords: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GenCords
+.PHONY : GenCords
+
+# fast build rule for target.
+GenCords/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GenCords.dir/build.make CMakeFiles/GenCords.dir/build
+.PHONY : GenCords/fast
+
+#=============================================================================
+# Target rules for targets named parent_lab3
+
+# Build rule for target.
+parent_lab3: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 parent_lab3
+.PHONY : parent_lab3
+
+# fast build rule for target.
+parent_lab3/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/build
+.PHONY : parent_lab3/fast
+
+lab2/generator_rand_corrds.o: lab2/generator_rand_corrds.c.o
+.PHONY : lab2/generator_rand_corrds.o
 
 # target to build an object file
-lab1/parent.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/parent.c.o
-.PHONY : lab1/parent.c.o
+lab2/generator_rand_corrds.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GenCords.dir/build.make CMakeFiles/GenCords.dir/lab2/generator_rand_corrds.c.o
+.PHONY : lab2/generator_rand_corrds.c.o
 
-lab1/parent.i: lab1/parent.c.i
-.PHONY : lab1/parent.i
+lab2/generator_rand_corrds.i: lab2/generator_rand_corrds.c.i
+.PHONY : lab2/generator_rand_corrds.i
 
 # target to preprocess a source file
-lab1/parent.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/parent.c.i
-.PHONY : lab1/parent.c.i
+lab2/generator_rand_corrds.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GenCords.dir/build.make CMakeFiles/GenCords.dir/lab2/generator_rand_corrds.c.i
+.PHONY : lab2/generator_rand_corrds.c.i
 
-lab1/parent.s: lab1/parent.c.s
-.PHONY : lab1/parent.s
+lab2/generator_rand_corrds.s: lab2/generator_rand_corrds.c.s
+.PHONY : lab2/generator_rand_corrds.s
 
 # target to generate assembly for a file
-lab1/parent.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/OSLab.dir/build.make CMakeFiles/OSLab.dir/lab1/parent.c.s
-.PHONY : lab1/parent.c.s
+lab2/generator_rand_corrds.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GenCords.dir/build.make CMakeFiles/GenCords.dir/lab2/generator_rand_corrds.c.s
+.PHONY : lab2/generator_rand_corrds.c.s
+
+lab2/parent.o: lab2/parent.c.o
+.PHONY : lab2/parent.o
+
+# target to build an object file
+lab2/parent.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab2.dir/build.make CMakeFiles/parent_lab2.dir/lab2/parent.c.o
+.PHONY : lab2/parent.c.o
+
+lab2/parent.i: lab2/parent.c.i
+.PHONY : lab2/parent.i
+
+# target to preprocess a source file
+lab2/parent.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab2.dir/build.make CMakeFiles/parent_lab2.dir/lab2/parent.c.i
+.PHONY : lab2/parent.c.i
+
+lab2/parent.s: lab2/parent.c.s
+.PHONY : lab2/parent.s
+
+# target to generate assembly for a file
+lab2/parent.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab2.dir/build.make CMakeFiles/parent_lab2.dir/lab2/parent.c.s
+.PHONY : lab2/parent.c.s
+
+lab3/child.o: lab3/child.c.o
+.PHONY : lab3/child.o
+
+# target to build an object file
+lab3/child.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/child.c.o
+.PHONY : lab3/child.c.o
+
+lab3/child.i: lab3/child.c.i
+.PHONY : lab3/child.i
+
+# target to preprocess a source file
+lab3/child.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/child.c.i
+.PHONY : lab3/child.c.i
+
+lab3/child.s: lab3/child.c.s
+.PHONY : lab3/child.s
+
+# target to generate assembly for a file
+lab3/child.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/child.c.s
+.PHONY : lab3/child.c.s
+
+lab3/parent.o: lab3/parent.c.o
+.PHONY : lab3/parent.o
+
+# target to build an object file
+lab3/parent.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/parent.c.o
+.PHONY : lab3/parent.c.o
+
+lab3/parent.i: lab3/parent.c.i
+.PHONY : lab3/parent.i
+
+# target to preprocess a source file
+lab3/parent.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/parent.c.i
+.PHONY : lab3/parent.c.i
+
+lab3/parent.s: lab3/parent.c.s
+.PHONY : lab3/parent.s
+
+# target to generate assembly for a file
+lab3/parent.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/parent.c.s
+.PHONY : lab3/parent.c.s
 
 # Help Target
 help:
@@ -161,10 +259,21 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... OSLab"
-	@echo "... lab1/parent.o"
-	@echo "... lab1/parent.i"
-	@echo "... lab1/parent.s"
+	@echo "... GenCords"
+	@echo "... parent_lab2"
+	@echo "... parent_lab3"
+	@echo "... lab2/generator_rand_corrds.o"
+	@echo "... lab2/generator_rand_corrds.i"
+	@echo "... lab2/generator_rand_corrds.s"
+	@echo "... lab2/parent.o"
+	@echo "... lab2/parent.i"
+	@echo "... lab2/parent.s"
+	@echo "... lab3/child.o"
+	@echo "... lab3/child.i"
+	@echo "... lab3/child.s"
+	@echo "... lab3/parent.o"
+	@echo "... lab3/parent.i"
+	@echo "... lab3/parent.s"
 .PHONY : help
 
 

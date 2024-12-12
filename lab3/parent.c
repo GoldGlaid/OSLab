@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Создаем семафоры
-    sem_t *sem1 = sem_open(SEM_NAME1, O_CREAT, 0600, 1);
-    sem_t *sem2 = sem_open(SEM_NAME2, O_CREAT, 0600, 1);
+    sem_t *sem1 = sem_open(SEM_NAME1, O_CREAT, 0600, 0);
+    sem_t *sem2 = sem_open(SEM_NAME2, O_CREAT, 0600, 0);
     if (sem1 == SEM_FAILED || sem2 == SEM_FAILED) {
         const char msg[] = "[PARENT] ERROR: SEMAPHORE_ERROR.\n";
         write(STDERR_FILENO, msg, sizeof(msg));
@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) {
         dup2(file1, STDOUT_FILENO);
         // Дочерний процесс 1
         char *const args[] = {"child1", "1", NULL};
-        sem_wait(sem1); // Ждем семафор
         execv("./child1", args);
         const char *msg_error = "[PARENT] ERROR: ERROR_EXECV1\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
@@ -89,7 +88,6 @@ int main(int argc, char *argv[]) {
 
         // Дочерний процесс 2
         char *const args[] = {"child2", "2", NULL};
-        sem_wait(sem2); // Ждем семафор
         execv("./child2", args);
         const char *msg_error = "[PARENT] ERROR: ERROR_EXECV2\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
@@ -148,6 +146,7 @@ int main(int argc, char *argv[]) {
 
     // Освобождаем общую память
     munmap(shm, SHM_SIZE);
+
     shm_unlink(shm_name);
 
     close(file1);
