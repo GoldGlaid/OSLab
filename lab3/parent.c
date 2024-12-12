@@ -1,24 +1,4 @@
-#include <fcntl.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <time.h>
-#include <sys/wait.h>
-#include <stdbool.h>
-#include <sys/mman.h>
-#include <semaphore.h>
-#include <stdio.h>
-#include <sys/stat.h>
-
-typedef enum {
-    OK,
-    INVALID_INPUT,
-    INVALID_FILES,
-    MEMORY_ERROR,
-    ERROR_FORK,
-    ERROR_EXECV,
-} state;
+#include "pool.h"
 
 char *get_row(char *symbol);
 
@@ -48,8 +28,14 @@ int main(int argc, char *argv[]) {
     }
 
     // Создаем общую память
-    const size_t SHM_SIZE = 4096;
-    char *shm = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    const size_t SHM_SIZE = BUFSIZE;
+
+    // Используем именованную разделяемую память
+    const char *shm_name = SHARED_MEMORY_NAME;
+    int shm_fd = shm_open(shm_name, O_CREAT | O_RDWR, 0666);
+    ftruncate(shm_fd, SHM_SIZE);
+    char *shm = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+
     if (shm == MAP_FAILED) {
         const char msg[] = "[PARENT] ERROR: MEMORY_ERROR.\n";
         write(STDERR_FILENO, msg, sizeof(msg));
@@ -57,8 +43,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Создаем семафоры
-    sem_t *sem1 = sem_open("/sem1", O_CREAT, 0600, 0);
-    sem_t *sem2 = sem_open("/sem2", O_CREAT, 0600, 0);
+    sem_t *sem1 = sem_open(SEM_NAME1, O_CREAT, 0600, 1);
+    sem_t *sem2 = sem_open(SEM_NAME2, O_CREAT, 0600, 1);
     if (sem1 == SEM_FAILED || sem2 == SEM_FAILED) {
         const char msg[] = "[PARENT] ERROR: SEMAPHORE_ERROR.\n";
         write(STDERR_FILENO, msg, sizeof(msg));
@@ -132,13 +118,13 @@ int main(int argc, char *argv[]) {
         }
         char msg_sem[512];
         if (random_number < 80) {
-            strcpy(shm, buf);
+            snprintf(shm, SHM_SIZE, "%s", buf);
             sem_post(sem1); // Отправляем сигнал дочернему процессу 1
             uint32_t len_msg = snprintf(msg_sem, sizeof(msg_sem) - 1,
                                         "[PARENT] Sent to child1: %s\n", buf);
             write(STDOUT_FILENO, msg_sem, len_msg);
         } else {
-            strcpy(shm, buf);
+            snprintf(shm, SHM_SIZE, "%s", buf);
             sem_post(sem2); // Отправляем сигнал дочернему процессу 2
             uint32_t len_msg = snprintf(msg_sem, sizeof(msg_sem) - 1,
                                         "[PARENT] Sent to child2: %s\n", buf);
@@ -148,7 +134,7 @@ int main(int argc, char *argv[]) {
     }
 
     symbol = EOF;
-    printf("proizoshol POST\n");
+
     strcpy(shm, &symbol);
     sem_post(sem1);
     sem_post(sem2);
@@ -156,11 +142,13 @@ int main(int argc, char *argv[]) {
     // Закрываем семафоры
     sem_close(sem1);
     sem_close(sem2);
-    sem_unlink("/sem1");
-    sem_unlink("/sem2");
+
+    sem_unlink(SEM_NAME1);
+    sem_unlink(SEM_NAME2);
 
     // Освобождаем общую память
     munmap(shm, SHM_SIZE);
+    shm_unlink(shm_name);
 
     close(file1);
     close(file2);

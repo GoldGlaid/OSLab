@@ -1,10 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <semaphore.h>
-#include <sys/mman.h>
-#include <fcntl.h>
+#include "pool.h"
 
 void reverse_string(char *str) {
     int len = strlen(str);
@@ -16,17 +10,20 @@ void reverse_string(char *str) {
 }
 
 int main(int argc, char *argv[]) {
+    char status;
+
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <child_number>\n", argv[0]);
+        const char *msg_error = "[CHILD] ERROR: INVALID_INPUT.\n";
+        write(STDERR_FILENO, msg_error, strlen(msg_error));
         exit(EXIT_FAILURE);
     }
 
     int child_number = atoi(argv[1]);
     sem_t *sem;
     if (child_number == 1)
-        sem = sem_open("/sem1", 0);
+        sem = sem_open(SEM_NAME1, 1);
     else
-        sem = sem_open("/sem2", 0);
+        sem = sem_open(SEM_NAME2, 1);
 
     if (sem == SEM_FAILED) {
         const char *msg_error = "[CHILD] ERROR: SEMAPHORE_ERROR.\n";
@@ -35,41 +32,35 @@ int main(int argc, char *argv[]) {
     }
 
     const size_t SHM_SIZE = 4096;
-    char *shm = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    // Подключаемся к именованной разделяемой памяти
+    int shm_fd = shm_open(SHARED_MEMORY_NAME, O_RDWR, 0666);
+    char *shm = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
     if (shm == MAP_FAILED) {
         const char *msg_error = "[CHILD] ERROR: MEMORY_ERROR.\n";
         write(STDERR_FILENO, msg_error, strlen(msg_error));
         exit(EXIT_FAILURE);
     }
 
-    char status;
     while (1) {
-        fprintf(stderr,"%s is waiting row\n", argv[0]);
-        sem_wait(sem);
-        fprintf(stderr,"%s proshol\n", argv[0]);
 
+        sem_wait(sem);
 
         status = shm[0];
         if (status == EOF) {
             break;
         }
 
-        char *row = &shm[1];
-        int received_number = strlen(row);
+        char *row = shm;
+        reverse_string(row); // Переворачиваем строку
 
-        reverse_string(row);
-
-        char newline = '\n';
-        write(STDOUT_FILENO, row, received_number);
-        write(STDOUT_FILENO, &newline, 1);
-        fprintf(stderr,"%s write into file\n", argv[0]);
+        write(STDOUT_FILENO, row, strlen(row));
+        write(STDOUT_FILENO, "\n", 1);
     }
 
 
+    // После завершения работы
     munmap(shm, SHM_SIZE);
     sem_close(sem);
-    sem_unlink(child_number == 1 ? "/sem1" : "/sem2");
-    fprintf(stderr,"%s exit\n", argv[0]);
 
     return 0;
 }
