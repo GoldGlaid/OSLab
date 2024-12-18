@@ -155,6 +155,19 @@ parent_lab3/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/build
 .PHONY : parent_lab3/fast
 
+#=============================================================================
+# Target rules for targets named lab4
+
+# Build rule for target.
+lab4: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lab4
+.PHONY : lab4
+
+# fast build rule for target.
+lab4/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/build
+.PHONY : lab4/fast
+
 lab2/generator_rand_corrds.o: lab2/generator_rand_corrds.c.o
 .PHONY : lab2/generator_rand_corrds.o
 
@@ -251,6 +264,78 @@ lab3/parent.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/parent.c.s
 .PHONY : lab3/parent.c.s
 
+lab4/libs/allocator_list.o: lab4/libs/allocator_list.cpp.o
+.PHONY : lab4/libs/allocator_list.o
+
+# target to build an object file
+lab4/libs/allocator_list.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.o
+.PHONY : lab4/libs/allocator_list.cpp.o
+
+lab4/libs/allocator_list.i: lab4/libs/allocator_list.cpp.i
+.PHONY : lab4/libs/allocator_list.i
+
+# target to preprocess a source file
+lab4/libs/allocator_list.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.i
+.PHONY : lab4/libs/allocator_list.cpp.i
+
+lab4/libs/allocator_list.s: lab4/libs/allocator_list.cpp.s
+.PHONY : lab4/libs/allocator_list.s
+
+# target to generate assembly for a file
+lab4/libs/allocator_list.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.s
+.PHONY : lab4/libs/allocator_list.cpp.s
+
+lab4/libs/allocator_mkk.o: lab4/libs/allocator_mkk.cpp.o
+.PHONY : lab4/libs/allocator_mkk.o
+
+# target to build an object file
+lab4/libs/allocator_mkk.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.o
+.PHONY : lab4/libs/allocator_mkk.cpp.o
+
+lab4/libs/allocator_mkk.i: lab4/libs/allocator_mkk.cpp.i
+.PHONY : lab4/libs/allocator_mkk.i
+
+# target to preprocess a source file
+lab4/libs/allocator_mkk.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.i
+.PHONY : lab4/libs/allocator_mkk.cpp.i
+
+lab4/libs/allocator_mkk.s: lab4/libs/allocator_mkk.cpp.s
+.PHONY : lab4/libs/allocator_mkk.s
+
+# target to generate assembly for a file
+lab4/libs/allocator_mkk.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.s
+.PHONY : lab4/libs/allocator_mkk.cpp.s
+
+lab4/main.o: lab4/main.cpp.o
+.PHONY : lab4/main.o
+
+# target to build an object file
+lab4/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.o
+.PHONY : lab4/main.cpp.o
+
+lab4/main.i: lab4/main.cpp.i
+.PHONY : lab4/main.i
+
+# target to preprocess a source file
+lab4/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.i
+.PHONY : lab4/main.cpp.i
+
+lab4/main.s: lab4/main.cpp.s
+.PHONY : lab4/main.s
+
+# target to generate assembly for a file
+lab4/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.s
+.PHONY : lab4/main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -260,6 +345,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... GenCords"
+	@echo "... lab4"
 	@echo "... parent_lab2"
 	@echo "... parent_lab3"
 	@echo "... lab2/generator_rand_corrds.o"
@@ -274,6 +360,15 @@ help:
 	@echo "... lab3/parent.o"
 	@echo "... lab3/parent.i"
 	@echo "... lab3/parent.s"
+	@echo "... lab4/libs/allocator_list.o"
+	@echo "... lab4/libs/allocator_list.i"
+	@echo "... lab4/libs/allocator_list.s"
+	@echo "... lab4/libs/allocator_mkk.o"
+	@echo "... lab4/libs/allocator_mkk.i"
+	@echo "... lab4/libs/allocator_mkk.s"
+	@echo "... lab4/main.o"
+	@echo "... lab4/main.i"
+	@echo "... lab4/main.s"
 .PHONY : help
 
 

@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
         exit(INVALID_INPUT);
     }
 
+
     // Создаем на запись файл для Дочернего процесса 1
     char *input_path1 = argv[1];
     int32_t file1 = open(input_path1, O_WRONLY | O_TRUNC | 0600);
