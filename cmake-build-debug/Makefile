@@ -264,77 +264,77 @@ lab3/parent.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/parent_lab3.dir/build.make CMakeFiles/parent_lab3.dir/lab3/parent.c.s
 .PHONY : lab3/parent.c.s
 
-lab4/libs/allocator_list.o: lab4/libs/allocator_list.cpp.o
-.PHONY : lab4/libs/allocator_list.o
+lab4/allocator_freelist.o: lab4/allocator_freelist.c.o
+.PHONY : lab4/allocator_freelist.o
 
 # target to build an object file
-lab4/libs/allocator_list.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.o
-.PHONY : lab4/libs/allocator_list.cpp.o
+lab4/allocator_freelist.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_freelist.c.o
+.PHONY : lab4/allocator_freelist.c.o
 
-lab4/libs/allocator_list.i: lab4/libs/allocator_list.cpp.i
-.PHONY : lab4/libs/allocator_list.i
+lab4/allocator_freelist.i: lab4/allocator_freelist.c.i
+.PHONY : lab4/allocator_freelist.i
 
 # target to preprocess a source file
-lab4/libs/allocator_list.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.i
-.PHONY : lab4/libs/allocator_list.cpp.i
+lab4/allocator_freelist.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_freelist.c.i
+.PHONY : lab4/allocator_freelist.c.i
 
-lab4/libs/allocator_list.s: lab4/libs/allocator_list.cpp.s
-.PHONY : lab4/libs/allocator_list.s
+lab4/allocator_freelist.s: lab4/allocator_freelist.c.s
+.PHONY : lab4/allocator_freelist.s
 
 # target to generate assembly for a file
-lab4/libs/allocator_list.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_list.cpp.s
-.PHONY : lab4/libs/allocator_list.cpp.s
+lab4/allocator_freelist.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_freelist.c.s
+.PHONY : lab4/allocator_freelist.c.s
 
-lab4/libs/allocator_mkk.o: lab4/libs/allocator_mkk.cpp.o
-.PHONY : lab4/libs/allocator_mkk.o
+lab4/allocator_mkk.o: lab4/allocator_mkk.c.o
+.PHONY : lab4/allocator_mkk.o
 
 # target to build an object file
-lab4/libs/allocator_mkk.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.o
-.PHONY : lab4/libs/allocator_mkk.cpp.o
+lab4/allocator_mkk.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_mkk.c.o
+.PHONY : lab4/allocator_mkk.c.o
 
-lab4/libs/allocator_mkk.i: lab4/libs/allocator_mkk.cpp.i
-.PHONY : lab4/libs/allocator_mkk.i
+lab4/allocator_mkk.i: lab4/allocator_mkk.c.i
+.PHONY : lab4/allocator_mkk.i
 
 # target to preprocess a source file
-lab4/libs/allocator_mkk.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.i
-.PHONY : lab4/libs/allocator_mkk.cpp.i
+lab4/allocator_mkk.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_mkk.c.i
+.PHONY : lab4/allocator_mkk.c.i
 
-lab4/libs/allocator_mkk.s: lab4/libs/allocator_mkk.cpp.s
-.PHONY : lab4/libs/allocator_mkk.s
+lab4/allocator_mkk.s: lab4/allocator_mkk.c.s
+.PHONY : lab4/allocator_mkk.s
 
 # target to generate assembly for a file
-lab4/libs/allocator_mkk.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/libs/allocator_mkk.cpp.s
-.PHONY : lab4/libs/allocator_mkk.cpp.s
+lab4/allocator_mkk.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/allocator_mkk.c.s
+.PHONY : lab4/allocator_mkk.c.s
 
-lab4/main.o: lab4/main.cpp.o
+lab4/main.o: lab4/main.c.o
 .PHONY : lab4/main.o
 
 # target to build an object file
-lab4/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.o
-.PHONY : lab4/main.cpp.o
+lab4/main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.c.o
+.PHONY : lab4/main.c.o
 
-lab4/main.i: lab4/main.cpp.i
+lab4/main.i: lab4/main.c.i
 .PHONY : lab4/main.i
 
 # target to preprocess a source file
-lab4/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.i
-.PHONY : lab4/main.cpp.i
+lab4/main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.c.i
+.PHONY : lab4/main.c.i
 
-lab4/main.s: lab4/main.cpp.s
+lab4/main.s: lab4/main.c.s
 .PHONY : lab4/main.s
 
 # target to generate assembly for a file
-lab4/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.cpp.s
-.PHONY : lab4/main.cpp.s
+lab4/main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab4.dir/build.make CMakeFiles/lab4.dir/lab4/main.c.s
+.PHONY : lab4/main.c.s
 
 # Help Target
 help:
@@ -360,12 +360,12 @@ help:
 	@echo "... lab3/parent.o"
 	@echo "... lab3/parent.i"
 	@echo "... lab3/parent.s"
-	@echo "... lab4/libs/allocator_list.o"
-	@echo "... lab4/libs/allocator_list.i"
-	@echo "... lab4/libs/allocator_list.s"
-	@echo "... lab4/libs/allocator_mkk.o"
-	@echo "... lab4/libs/allocator_mkk.i"
-	@echo "... lab4/libs/allocator_mkk.s"
+	@echo "... lab4/allocator_freelist.o"
+	@echo "... lab4/allocator_freelist.i"
+	@echo "... lab4/allocator_freelist.s"
+	@echo "... lab4/allocator_mkk.o"
+	@echo "... lab4/allocator_mkk.i"
+	@echo "... lab4/allocator_mkk.s"
 	@echo "... lab4/main.o"
 	@echo "... lab4/main.i"
 	@echo "... lab4/main.s"
